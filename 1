@@ -1,0 +1,64 @@
+local stringer = "Quest Dummy %s"
+local questing = false
+local player = game.Players.LocalPlayer
+local mobtable1 = {"Bandit","Noob","Monkey"}
+local mobtable2 = {"Marine"}
+local mobtable3 = {"Skypiean"}
+local mobtable4 = {"Fishman"}
+local mobtable5 = {"Buggy Pirate"}
+local mobtable6 = {"Pirate"}
+local mobtables = {mobtable1,mobtable2,mobtable3,mobtable4,mobtable5,mobtable6}
+local mobtablec = mobtables[_G.dummy]
+while _G.hit == true do
+  local w = math.random(0,0.2)
+ wait(w)
+local mob = mobtablec[_G.Quest]
+for i,v in pairs(workspace.Entities:GetChildren()) do
+ if v.Name == mob and questing == false then
+     player.Character:WaitForChild("HumanoidRootPart").CFrame = v:WaitForChild("Torso").CFrame * CFrame.new(0,0,_G.distance)
+ end
+end
+local remote = Game["ReplicatedStorage"]["Remotes"]["quest"]
+local args = {
+[1] = "Accept",
+[2] = {
+ Index = _G.Quest,
+ Model = game.Workspace.Interactables:FindFirstChild(string.format(stringer, _G.dummy)):FindFirstChild(string.format(stringer, _G.dummy)),
+}
+}
+local DF = {
+   [1] = "Devil Fruit",
+   [2] = "Q",
+   [3] = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+}
+local Fight = {
+   [1] = "Fighting Style",
+   [2] = "Q",
+   [3] = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+}
+if #player.Quests:GetChildren() == 0 and questing == false then
+  questing = true
+player.Character:WaitForChild("HumanoidRootPart").CFrame = game.Workspace.Interactables:FindFirstChild(string.format(stringer, _G.dummy)):FindFirstChild(string.format(stringer, _G.dummy)).CFrame * CFrame.new(0,0,3)
+remote:FireServer(unpack(args))
+remote:FireServer(unpack(args))
+remote:FireServer(unpack(args))
+remote:FireServer(unpack(args))
+remote:FireServer(unpack(args))
+game.ReplicatedStorage.Remotes.requestAbility:FireServer(_G.tool, "G")
+wait(2)
+questing = false
+end
+if _G.df == true and #_G.fruitmoves >= 0 then
+for i,v in ipairs(_G.fruitmoves) do
+    DF[2] = v
+game:GetService("ReplicatedStorage").Remotes.requestAbility:FireServer(unpack(DF))
+end
+end
+if _G.styleskills == true and #_G.stylemoves >= 0 then
+for i,v in ipairs(_G.stylemoves) do
+    Fight[2] = v
+game:GetService("ReplicatedStorage").Remotes.requestAbility:FireServer(unpack(Fight))
+end
+end
+game.ReplicatedStorage.Remotes.requestAbility:FireServer(_G.tool, "MouseButton1")
+end
